@@ -191,6 +191,7 @@ namespace Mail2Bug
             public string EWSMailboxAddress { get; set; }
             public string EWSUsername { get; set; }
             public string EWSPasswordFile { get; set; }
+            public string EWSUrl { get; set; }
 
             #endregion
 

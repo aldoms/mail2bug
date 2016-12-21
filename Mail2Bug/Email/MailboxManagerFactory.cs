@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mail2Bug.Email.EWS;
 using Mail2Bug.ExceptionClasses;
 using Mail2Bug.Helpers;
@@ -26,7 +27,13 @@ namespace Mail2Bug.Email
                 Password = DPAPIHelper.ReadDataFromFile(emailSettings.EWSPasswordFile, emailSettings.EncryptionScope)
             };
 
-            var exchangeService = _connectionManger.GetConnection(credentials, emailSettings.UseConversationGuidOnly);
+            Uri exchangeUrl = null;
+            if (!string.IsNullOrEmpty(emailSettings.EWSUrl) && !Uri.TryCreate(emailSettings.EWSUrl, UriKind.Absolute, out exchangeUrl))
+            {
+                throw new BadConfigException("EWSUrl", "EWSUrl is not a valid Url");
+            }
+
+            var exchangeService = _connectionManger.GetConnection(credentials, emailSettings.UseConversationGuidOnly, exchangeUrl);
             var postProcessor = GetPostProcesor(emailSettings, exchangeService.Service);
 
             switch (emailSettings.ServiceType)

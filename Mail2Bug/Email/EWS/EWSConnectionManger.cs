@@ -40,11 +40,11 @@ namespace Mail2Bug.Email.EWS
             }
         }
 
-        public EWSConnection GetConnection(Credentials credentials, bool useConversationGuidOnly)
+        public EWSConnection GetConnection(Credentials credentials, bool useConversationGuidOnly, Uri exchangeUrl)
         {
             if (!_enableConnectionCaching)
             {
-                return ConnectToEWS(credentials, useConversationGuidOnly);
+                return ConnectToEWS(credentials, useConversationGuidOnly, exchangeUrl);
             }
 
             lock (_cachedConnections)
@@ -58,7 +58,7 @@ namespace Mail2Bug.Email.EWS
                 }
 
                 Logger.InfoFormat("Creating FolderMailboxManager for {0}", key);
-                _cachedConnections[key] = ConnectToEWS(credentials, useConversationGuidOnly);
+                _cachedConnections[key] = ConnectToEWS(credentials, useConversationGuidOnly, exchangeUrl);
                 return _cachedConnections[key];
             }
         }
@@ -79,7 +79,7 @@ namespace Mail2Bug.Email.EWS
                 credentials.UserName, credentials.Password.GetHashCode(), useConversationGuid);
         }
 
-        static private EWSConnection ConnectToEWS(Credentials credentials, bool useConversationGuidOnly)
+        static private EWSConnection ConnectToEWS(Credentials credentials, bool useConversationGuidOnly, Uri exchangeUrl)
         {
             Logger.DebugFormat("Initializing FolderMailboxManager for email adderss {0}", credentials.EmailAddress);
             var exchangeService = new ExchangeService(ExchangeVersion.Exchange2010_SP1)
@@ -88,14 +88,21 @@ namespace Mail2Bug.Email.EWS
                 Timeout = 60000
             };
 
-            exchangeService.AutodiscoverUrl(
-                credentials.EmailAddress,
-                x =>
-                {
-                    Logger.DebugFormat("Following redirection for EWS autodiscover: {0}", x);
-                    return true;
-                }
+            if (exchangeUrl == null)
+            {
+                exchangeService.AutodiscoverUrl(
+                    credentials.EmailAddress,
+                    x =>
+                    {
+                        Logger.DebugFormat("Following redirection for EWS autodiscover: {0}", x);
+                        return true;
+                    }
                 );
+            }
+            else
+            {
+                exchangeService.Url = exchangeUrl;
+            }
 
             Logger.DebugFormat("Service URL: {0}", exchangeService.Url);
 

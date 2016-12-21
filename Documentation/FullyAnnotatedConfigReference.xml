@@ -10,7 +10,7 @@
 
     <!-- 'TfsServerConfig' defines the TFS related settings, and specifically all the settings required to connect to TFS -->
       <TfsServerConfig>
-        <!-- 'CollectionUri' - The URI of the collection. 
+        <!-- 'CollectionUri' - The URI of the collection.
              - For On-prem TFS, the URI will look something like: `http://server:8080/tfs/YourColllection/`
              - For VS Online, the URI will look something like: `https://name.visualstudio.com/DefaultCollection/` -->
         <CollectionUri>http://tfsServer.madeUpDomain.com:8080/tfs/something</CollectionUri>
@@ -21,7 +21,7 @@
         <BypassRules>false</BypassRules>
 
         <!-- ServiceIdentityUsername - the username to use for logging in to TFS
-             - To use default credentials - i.e. login as the user running mail2bug - omit this element 
+             - To use default credentials - i.e. login as the user running mail2bug - omit this element
              - For VS online, it is recommended to provision a Service Identity and use it here. This can be done by following the
                instructions [here] (http://nakedalm.com/getting-service-account-vso-tfs-service-credential-viewer/)
              - Note also that for VS online, there will be changes coming soon, since the ServiceIdentity method of
@@ -33,13 +33,13 @@
         <!-- ServiceIdentityPasswordFile - the path to a DPAPI encrypted password file (created using the DpapiTool) - omit
              this element if you're using default credentials -->
         <ServiceIdentityPasswordFile>.\Resources\mail2bug.bin</ServiceIdentityPasswordFile>
-        
+
         <!-- AltAuthUsername - the username to use for logging in to VSO
-             - To use Service Identity credentials - omit this element 
+             - To use Service Identity credentials - omit this element
              - For VS online, you must set your alternate authentication credentials first. This can be done by following the
                instructions [here] (https://www.visualstudio.com/en-us/integrate/get-started/auth/overview) -->
         <AltAuthUsername>mail2bug</AltAuthUsername>
-        
+
         <!-- AltAuthPasswordFile - the path to a DPAPI encrypted password file (created using the DpapiTool) - omit
              this element if you're using Service Identity credentials -->
         <AltAuthPasswordFile>.\Resources\mail2bug.bin</AltAuthPasswordFile>
@@ -51,23 +51,23 @@
              OAuthResourceId and OAuthClientId represent the resource for which we're asking for autherntication, and a
              client ID that was provisioned for authenticating our app.
 
-             The username and password defined with ServiceIdentityUsername and ServiceidentityPasswordFile are used as 
+             The username and password defined with ServiceIdentityUsername and ServiceidentityPasswordFile are used as
              the credentials to authenticate with, so these are still needed even when using ADAL authentication.
 
              For more details on ADAL and OAuth, check out:
-             http://www.cloudidentity.com/blog/2013/09/12/active-directory-authentication-library-adal-v1-for-net-general-availability/ 
+             http://www.cloudidentity.com/blog/2013/09/12/active-directory-authentication-library-adal-v1-for-net-general-availability/
 
-        <OAuthContext></OAuthContext> 
+        <OAuthContext></OAuthContext>
         <OAuthResourceId></OAuthResourceId>
         <OAuthClientId></OAuthClientId>
         -->
-        
+
         <!--
             ServiceIdentityPatFile - path to the DPAPI encrypted file containing the Personal Acces Token for the
             user you wish to use to connect to VSO. Due to the nature of PATs, it is enough to only provide the token.
-            
+
             Personal access tokens can be generated from the profile of the desired user in VSO.
-            https://www.visualstudio.com/en-us/news/2015-jul-7-vso.aspx 
+            https://www.visualstudio.com/en-us/news/2015-jul-7-vso.aspx
             Click on the user name in the top right, select My Profile and then Security -> Personal Acces Tokens
         <ServiceIdentityPatFile>.\Resources\your-m2b-user-token.bin</ServiceIdentityPatFile>
         -->
@@ -79,7 +79,7 @@
         <WorkItemTemplate>Bug</WorkItemTemplate>
 
         <!-- CacheQueryFile - the path to a file containing the query that retrieves the work items to cache. This file
-             is created by authoring the query in VS and saving it to a .wiq file 
+             is created by authoring the query in VS and saving it to a .wiq file
              Note that @Projet is not properly handled in the context of the service, so be sure to remove the default
              clause for 'TeamProject = @Project' from the query -->
         <CacheQueryFile>.\Resources\Query.wiq</CacheQueryFile>
@@ -98,7 +98,7 @@
       <WorkItemSettings>
 
         <!-- ConversationIndexFieldName - The name of the field that should be used for storing the conversation ID from
-             the email that triggered the creation of the work item. The conversation ID is the means by which mail2bug 
+             the email that triggered the creation of the work item. The conversation ID is the means by which mail2bug
              identifies new emails on the same email thread as belonging to the same thread, and adds them to the previously
              created item rather than creating a new one.
              - This should be a TFS Text field (max-length 255)
@@ -113,10 +113,10 @@
              fail. The only automatically defined default is the 'Title' field, that gets the email subject as a value
              (and even that can be overridden by explicitly mentioning a different default value) -->
         <DefaultFieldValues>
-          <!-- 'DefaultValueDefinition' defines a single default value 
+          <!-- 'DefaultValueDefinition' defines a single default value
                - 'Field' attribute - name of the field to set
-               - 'Value' attribute - the default contents to assign to the field 
-        
+               - 'Value' attribute - the default contents to assign to the field
+
                The default settings supports the following special values, prefixed by double hash-signs.
                - Subject - The email subject
                - MessageBody - The body of the email message converted to plain text (i.e. if the body was HTML,
@@ -126,7 +126,7 @@
                  triggered the work item creation
                - RawMessageBody - The raw body of the email - i.e. if it's an HTML message, this would be the full
                  message HTML
-               - Now - Current date time in general ("g") date time format (see 
+               - Now - Current date time in general ("g") date time format (see
                  https://msdn.microsoft.com/en-us/library/az4se3k1%28v=vs.110%29.aspx for date time format specification)
                - Today - Current date in short date format ("d")
                - Sender - The name of the sender, resolved against the list of names recognized by TFS. If resolution fails
@@ -134,7 +134,7 @@
                - Location - In case the email is a meeting invite, the location of the meeting; empty string otherwise.
                - StartTime - In case the email is a meeting invite, the meeting start time; empty string otherwise.
                - EndTime - In case the email is a meeting invite, the meeting end time; empty string otherwise.
-                    
+
                The example below sets default for 5 fields - 4 of them with static default values, and the last
                one (Description) set to the text of the email body
                -->
@@ -147,7 +147,7 @@
         <!--  Mnemonics allow you to define short strings that users can put in the email to set specific fields to
               predefined values without the need for verbose explicit overrides. A single mnemonic can set one specific
               field, or several fieds. To have a single mnemonic set several fields, just add multiple MnemonicDefinition
-              elements with the same mnemonic specified in the "Mnemonic" attribute - one for each field you want to set 
+              elements with the same mnemonic specified in the "Mnemonic" attribute - one for each field you want to set
 
               To trigger a mnemonic, the users just include the string @@@mnemonic name in the email body
               A single email may contain multiple mnemonics -->
@@ -165,16 +165,16 @@
         <DateBasedOverrides>
           <!-- For each field you want to set based on the current date, create a single 'DateBasedFieldOverrides' element
                'FieldName' attribute - the name of the field to be set
-                
-               'Entries' - a collection of DateBasedOverrideEntry items, each defining a start date and a value 
+
+               'Entries' - a collection of DateBasedOverrideEntry items, each defining a start date and a value
                mail2bug will choose the entry with the latest start date that is still before the current date
                and will assign the value from that entry to the field.
-               
+
                'DefaultValue' - if all start dates are after the current date, then the default value will be used
                instead.
 
-               In the example below example: Set the 'Iteration' field based on the current date - 
-               - For items created in January (i.e. after 1/1/2015, but before 2/1/2015), set it to 'Iteration 41' 
+               In the example below example: Set the 'Iteration' field based on the current date -
+               - For items created in January (i.e. after 1/1/2015, but before 2/1/2015), set it to 'Iteration 41'
                - For items created in Febrary, set it to 'Iteration 42'
                - For items created in March or later it set it to 'Iteration 43'
                - Items created before 1/1/2015 will get the default, which is Iteration 40 -->
@@ -190,7 +190,7 @@
 
         <!-- 'ApplyOverridesDuringUpdate' - 'true' means that explicit overrides and mnemonics in reply messages will be
              processed, allowing users to make changes to an existing work item with reply messages
-            
+
              One recommneded way for using this is to define mnemonics for common actions like resolving/closing/reactivating
              a work item, so that users can, for example, resolve a bug by replying with a mnemonic like '@@@Resolve' -->
         <ApplyOverridesDuringUpdate>true</ApplyOverridesDuringUpdate>
@@ -205,7 +205,7 @@
              of the work item -->
         <AttachOriginalMessage>true</AttachOriginalMessage>
 
-        <!-- 'AttachUpdateMessages' - 'true' means we should attach "reply" emails that update the work item 
+        <!-- 'AttachUpdateMessages' - 'true' means we should attach "reply" emails that update the work item
              The default is 'false', since this can add considerable data size load to the work item -->
         <AttachUpdateMessages>false</AttachUpdateMessages>
 
@@ -216,9 +216,9 @@
 
         <!-- 'ServiceType' - this value dictates how the email inbox is monitored and which emails will be picked up for
              processing.
-             
-             There are two types supported: 
-             - 'EWSByRecipients' (recommended) 
+
+             There are two types supported:
+             - 'EWSByRecipients' (recommended)
              - 'EWSByFolder'
 
              'EWSByRecipients' - mail2bug will monitor the 'Inbox' of the mailbox and will process all the items where
@@ -227,11 +227,11 @@
              the inbox would be processed.
              For setups where you want to serve multiple instances on a single mailbox, you can create other email addresses
              that lead to the same mailbox and define which instance should pick each message by specifying the relevant
-             email address in the 'Recipients' element 
+             email address in the 'Recipients' element
 
              'EWSByFolder' - mail2bug will monitor a specific folder under the root of the mailbox. In this setup, you
              create (server side) exchange rules to route incoming emails to the correct folder.
-             Note that the folders need to be directly under the root of the mailbox rather than under 'Inbox'. 
+             Note that the folders need to be directly under the root of the mailbox rather than under 'Inbox'.
              The folder name to monitor is specified by the 'IncomingFolder' element
              The reason for this method being less preferable is that it involves extra steps for creating exchange rules,
              which can be quite cumbersome. Also, exchange rules can be flaky at times, especially if you have a lot of them
@@ -254,6 +254,9 @@
 
         <!-- The email address of the inbox we want to monitor -->
         <EWSMailboxAddress>mail2bug@domain.com</EWSMailboxAddress>
+
+        <!-- The Exchange Url, use this in case you're having problems with autodiscover and know the Url -->
+        <EWSUrl>https://example.com/EWS/Exchange.asmx</EWSUrl>
 
         <!-- A username with permissions to log in to the email account. This is generally either in the form of
              email (usually the same as the email address in EWSMailboxAddress), or in DOMAIN\username form. I've seen cases
@@ -278,9 +281,9 @@
              created-->
         <ReplyTemplate>.\Resources\ReplyTemplateExample.htm</ReplyTemplate>
 
-        <!-- Ideally, you'll never need to change these regexes and you'll use the defaults below, but they do give you 
+        <!-- Ideally, you'll never need to change these regexes and you'll use the defaults below, but they do give you
              the flexibility to define your own format for specifying overrides, or detecting that an email is an "append
-             only" email. Don't forget to escape any angle brackets. 
+             only" email. Don't forget to escape any angle brackets.
              If you need to change these, keep in mind that the capturing group tags (e.g. 'id', 'fieldName') must be
              present for the code to be able to use the regular expressions  -->
         <AppendOnlyEmailTitleRegex>.*(bug|work item)\s*#*\s*(?&lt;id&gt;\d+)</AppendOnlyEmailTitleRegex>
