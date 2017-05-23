@@ -68,6 +68,10 @@ namespace Mail2Bug
             // If this setting is set to 'true', changes to work items won't be saved (and no new items will be created)
             public bool SimulationMode { get; set; }
 
+            // If this setting is set to 'true', the connection to TFS will be made using the updated version of the TFS
+            // libraries, which use the REST APIs
+            public bool UseVssConnection { get; set; }
+
             // The name of the field which contains all the allowed names in its allowed values list (usually "Assigned To")
             public string NamesListFieldName { get; set; }
 

@@ -99,6 +99,11 @@ namespace Mail2Bug
                 Logger.InfoFormat("Working in simulation mode. Using WorkItemManagerMock");
                 workItemManager = new WorkItemManagerMock(_config.WorkItemSettings.ConversationIndexFieldName);
             }
+            else if (_config.TfsServerConfig.UseVssConnection)
+            {
+                Logger.InfoFormat("Working in standard mode, using VssWorkItemManager");
+                workItemManager = new VssWorkItemManager(_config);
+            }
             else
             {
                 Logger.InfoFormat("Working in standard mode, using TFSWorkItemManager");

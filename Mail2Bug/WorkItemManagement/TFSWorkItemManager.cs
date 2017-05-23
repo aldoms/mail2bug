@@ -145,9 +145,9 @@ namespace Mail2Bug.WorkItemManagement
                     return new List<TfsClientCredentials>();
                 }
 
-                var userCredential = new UserCredential(usernameAndPassword.Item1, usernameAndPassword.Item2);
+                var userCredential = new UserPasswordCredential(usernameAndPassword.Item1, usernameAndPassword.Item2);
                 var authContext = new AuthenticationContext(_config.TfsServerConfig.OAuthContext);
-                var result = authContext.AcquireToken(_config.TfsServerConfig.OAuthResourceId, _config.TfsServerConfig.OAuthClientId, userCredential);
+                var result = authContext.AcquireTokenAsync(_config.TfsServerConfig.OAuthResourceId, _config.TfsServerConfig.OAuthClientId, userCredential).Result;
                 var oauthToken = new OAuthTokenCredential(result.AccessToken);
                 return new List<TfsClientCredentials>()
                 {
