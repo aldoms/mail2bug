@@ -263,16 +263,19 @@ namespace Mail2Bug.WorkItemManagement
             var itemsToCache = _witClient.QueryByWiqlAsync(new Wiql() { Query = _config.TfsServerConfig.CacheQuery }).Result;
             Logger.InfoFormat("{0} items retrieved by TFS cache query", itemsToCache.WorkItems.Count());
             var itemIds = itemsToCache.WorkItems.Select(w => w.Id).ToArray();
-            var workItems = _witClient.GetWorkItemsAsync(itemIds).Result;
-            foreach (var workItem in workItems)
+            if (itemIds?.Count() > 0)
             {
-                try
+                var workItems = _witClient.GetWorkItemsAsync(itemIds).Result;
+                foreach (var workItem in workItems)
                 {
-                    CacheWorkItem(workItem);
-                }
-                catch (Exception ex)
-                {
-                    Logger.ErrorFormat("Exception caught while caching work item with id {0}\n{1}", workItem.Id, ex);
+                    try
+                    {
+                        CacheWorkItem(workItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.ErrorFormat("Exception caught while caching work item with id {0}\n{1}", workItem.Id, ex);
+                    }
                 }
             }
         }
