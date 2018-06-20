@@ -40,7 +40,7 @@ namespace Mail2Bug.WorkItemManagement
             Logger.InfoFormat("Getting TFS WorkItem Type");
             _workItemType = _witClient.GetWorkItemTypesAsync(_tfsProject.Id).Result
                 .First(wit => wit.Name.Equals(_config.TfsServerConfig.WorkItemTemplate, StringComparison.InvariantCultureIgnoreCase));
-            _formalFieldNames = _workItemType.Fields.ToDictionary(f => f.Name.ToLowerInvariant(), f => f.ReferenceName);
+            _formalFieldNames = GetFormalFieldNames(_workItemType.Fields);
 
             Logger.InfoFormat("Getting Team Config");
             var teamContext = new TeamContext(_tfsProject.Id);
@@ -323,6 +323,28 @@ namespace Mail2Bug.WorkItemManagement
         {
             var fieldDef = _workItemType.Fields.Where(i => i.Name.Equals(_config.TfsServerConfig.NamesListFieldName, StringComparison.InvariantCultureIgnoreCase));
             return new NameResolver(fieldDef.Select(f => f.ReferenceName));
+        }
+
+        /// <summary>
+        /// Sometimes the work item fiels will be duplicated, so created this helper function
+        /// as LINQs ToDictionary was throwing up.
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        private static IDictionary<string, string> GetFormalFieldNames(IEnumerable<WorkItemTypeFieldInstance> fields)
+        {
+            var result = new Dictionary<string, string>();
+
+            foreach (var field in fields)
+            {
+                var key = field.Name.ToLowerInvariant();
+                if (!result.ContainsKey(key))
+                {
+                    result[key] = field.ReferenceName;
+                }
+            }
+
+            return result;
         }
 
         #region Config validation
